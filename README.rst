@@ -58,15 +58,15 @@ Using the model API
 
 And adding votes is also simple::
 
-	myinstance.rating.add(score=1, user=request.user, ip_address=request.META['REMOTE_ADDR'], request.COOKIES) # last param is optional - only if you use COOKIES-auth
+	myinstance.rating.add(score=1, user=request.user, ip_address=request.META['REMOTE_ADDR'], cookies = request.COOKIES) # last param is optional - only if you use COOKIES-auth
 
 Retrieving votes is just as easy::
 
-	myinstance.rating.get_rating_for_user(request.user, request.META['REMOTE_ADDR'], request.COOKIES) # last param is optional - only if you use COOKIES-auth
+	myinstance.rating.get_rating_for_user(request.user, request.META['REMOTE_ADDR'], cookies = request.COOKIES) # last param is optional - only if you use COOKIES-auth
 
 *New* You're also able to delete existent votes (if deletion enabled)::
 
-	myinstance.rating.delete(request.user, request.META['REMOTE_ADDR'], request.COOKIES) # last param is optional - only if you use COOKIES-auth
+	myinstance.rating.delete(request.user, request.META['REMOTE_ADDR'], cookies = request.COOKIES) # last param is optional - only if you use COOKIES-auth
 
 Accessing information about the rating of an object is also easy::
 
