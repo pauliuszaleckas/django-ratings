@@ -29,6 +29,14 @@ except ImportError:
 def md5_hexdigest(value):
     return md5(value).hexdigest()
 
+def gen_cookie_name(c_type_id, obj_id, key):
+    formatted = '%d.%d.%s' % (c_type_id, obj_id, key)
+    return 'drv%s' % formatted if settings.DEBUG else md5_hexdigest(formatted)
+
+def gen_cookie_value():
+    value = now().strftime('%Y%m%d%H%M%S%f')
+    return value if settings.DEBUG else md5_hexdigest(value)
+
 class Rating(object):
     def __init__(self, score, votes):
         self.score = score
@@ -98,17 +106,18 @@ class RatingManager(object):
         )
 
         if not (user and user.is_authenticated()):
+            is_anonymous = True
             if not ip_address:
                 raise ValueError('``user`` or ``ip_address`` must be present.')
             kwargs['user__isnull'] = True
             kwargs['ip_address'] = ip_address
         else:
+            is_anonymous = False
             kwargs['user'] = user
         
-        use_cookies = (self.field.allow_anonymous and self.field.use_cookies)
+        use_cookies = (self.field.allow_anonymous and is_anonymous and self.field.use_cookies)
         if use_cookies:
-            # TODO: move 'vote-%d.%d.%s' to settings or something
-            cookie_name = 'vote-%d.%d.%s' % (kwargs['content_type'].pk, kwargs['object_id'], kwargs['key'][:6],) # -> md5_hexdigest?
+            cookie_name = gen_cookie_name(kwargs['content_type'].pk, kwargs['object_id'], kwargs['key'][:6])
             cookie = cookies.get(cookie_name)
             if cookie:    
                 kwargs['cookie'] = cookie
@@ -165,11 +174,10 @@ class RatingManager(object):
         if not user:
             kwargs['ip_address'] = ip_address
         
-        use_cookies = (self.field.allow_anonymous and self.field.use_cookies)
+        use_cookies = (self.field.allow_anonymous and is_anonymous and self.field.use_cookies)
         if use_cookies:
-            defaults['cookie'] = now().strftime('%Y%m%d%H%M%S%f') # -> md5_hexdigest?
-            # TODO: move 'vote-%d.%d.%s' to settings or something
-            cookie_name = 'vote-%d.%d.%s' % (kwargs['content_type'].pk, kwargs['object_id'], kwargs['key'][:6],) # -> md5_hexdigest?
+            defaults['cookie'] = gen_cookie_value()
+            cookie_name = gen_cookie_name(kwargs['content_type'].pk, kwargs['object_id'], kwargs['key'][:6])
             cookie = cookies.get(cookie_name) # try to get existent cookie value
             if not cookie:
                 kwargs['cookie__isnull'] = True
