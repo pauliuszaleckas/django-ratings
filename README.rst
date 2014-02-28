@@ -1,21 +1,22 @@
-##############
-django-ratings
-##############
+###############
+django-ratings2
+###############
 
 A generic ratings module. The field itself appends two additional fields on the model, for optimization reasons. It adds ``<field>_score``, and ``<field>_votes`` fields, which are both integer fields.
+This is fork of original `django-ratings <https://github.com/dcramer/django-ratings>`_.
 
 ============
 Installation
 ============
 
-You will need to add ``djangoratings`` to your ``INSTALLED_APPS``::
+You will need to add ``djangoratings2`` to your ``INSTALLED_APPS``::
 
 	INSTALLED_APPS = (
 	    'django.contrib.admin',
 	    'django.contrib.auth',
 	    'django.contrib.contenttypes',
 	    'django.contrib.sessions',
-	    'djangoratings',
+	    'djangoratings2',
 	)
 
 Finally, run ``python manage.py syncdb`` in your application's directory to create the tables.
@@ -24,16 +25,16 @@ Finally, run ``python manage.py syncdb`` in your application's directory to crea
 Setup your models
 =================
 
-The way django-ratings is built requires you to attach a RatingField to your models. This field will create two columns, a votes column, and a score column. They will both be prefixed with your field name::
+The way django-ratings2 is built requires you to attach a RatingField to your models. This field will create two columns, a votes column, and a score column. They will both be prefixed with your field name::
 
-	from djangoratings.fields import RatingField
+	from djangoratings2.fields import RatingField
 
 	class MyModel(models.Model):
 	    rating = RatingField(range=5) # 5 possible rating values, 1-5
 
 Alternatively you could do something like::
 
-	from djangoratings.fields import AnonymousRatingField
+	from djangoratings2.fields import AnonymousRatingField
 
 	class MyModel(models.Model):
 	    rating = AnonymousRatingField(range=10)
@@ -105,7 +106,7 @@ Generic Views: Processing Votes
 
 The best way to use the generic views is by extending it, or calling it within your own code::
 
-	from djangoratings.views import AddRatingFromModel
+	from djangoratings2.views import AddRatingFromModel
 	
 	urlpatterns = patterns('',
 	    url(r'rate-my-post/(?P<object_id>\d+)/(?P<score>\d+)/', AddRatingFromModel(), {
@@ -117,7 +118,7 @@ The best way to use the generic views is by extending it, or calling it within y
 
 Another example, on Nibbits we use a basic API interface, and we simply call the ``AddRatingView`` within our own view::
 
-	from djangoratings.views import AddRatingView
+	from djangoratings2.views import AddRatingView
 	
 	# For the sake of this actually looking like documentation:
 	params = {
@@ -137,7 +138,7 @@ Another example, on Nibbits we use a basic API interface, and we simply call the
 COOKIE format
 ==========================
 
-*New*: For now COOKIE name has fixed format: "vote-{{ content_type.id }}.{{ object.id }}.{{ rating_field.key }}[:6]" and COOKIE value is simple datetime-stamp.
+For now COOKIE name has fixed format: "vote-{{ content_type.id }}.{{ object.id }}.{{ rating_field.key }}[:6]" and COOKIE value is simple datetime-stamp.
 
 Example: vote-15.56.2c5504=20101213101523456000 
 
@@ -148,7 +149,7 @@ And this COOKIE lives in user's browser for 1 year (this period is also fixed fo
 ==========================
 Limit Votes Per IP Address
 ==========================
-*New in 0.3.5*: There is now a setting, ``RATINGS_VOTES_PER_IP``, to limit the number of unique IPs per object/rating-field combination. This is useful if you have issues with users registering multiple accounts to vote on a single object::
+There is a setting, ``RATINGS_VOTES_PER_IP``, to limit the number of unique IPs per object/rating-field combination. This is useful if you have issues with users registering multiple accounts to vote on a single object::
 
 	RATINGS_VOTES_PER_IP = 3
 
@@ -156,7 +157,7 @@ Limit Votes Per IP Address
 Template Tags
 =============
 
-Right now django-ratings has limited support for template tags, and only for Django.
+Right now django-ratings2 has limited support for template tags, and only for Django.
 Load a ratings template tag set. ```{% load ratings %}```.
 
 -----------------
