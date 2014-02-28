@@ -22,7 +22,7 @@ class VoteQuerySet(QuerySet):
         
         # TODO: this could be improved
         for obj in to_update:
-            for field in getattr(obj, '_djangoratings', []):
+            for field in getattr(obj, '_djangoratings2', []):
                 getattr(obj, field.name)._update(commit=False)
             obj.save()
         
@@ -47,7 +47,7 @@ class VoteManager(Manager):
 
 class SimilarUserManager(Manager):
     def get_recommendations(self, user, model_class, min_score=1):
-        from djangoratings.models import Vote, IgnoredObject
+        from djangoratings2.models import Vote, IgnoredObject
         
         content_type = ContentType.objects.get_for_model(model_class)
         
@@ -87,7 +87,7 @@ class SimilarUserManager(Manager):
         # TODO: this doesnt handle scores that have multiple values (e.g. 10 points, 5 stars)
         # due to it calling an agreement as score = score. We need to loop each rating instance
         # and express the condition based on the range.
-        from djangoratings.models import Vote
+        from djangoratings2.models import Vote
         from django.db import connection
         cursor = connection.cursor()
         cursor.execute('begin')

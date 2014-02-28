@@ -10,7 +10,7 @@ from default_settings import RATINGS_VOTES_PER_IP
 from exceptions import *
 
 if 'django.contrib.contenttypes' not in settings.INSTALLED_APPS:
-    raise ImportError("djangoratings requires django.contrib.contenttypes in your INSTALLED_APPS")
+    raise ImportError("djangoratings2 requires django.contrib.contenttypes in your INSTALLED_APPS")
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -356,9 +356,9 @@ class RatingField(IntegerField):
 
         field = RatingCreator(self)
 
-        if not hasattr(cls, '_djangoratings'):
-            cls._djangoratings = []
-        cls._djangoratings.append(self)
+        if not hasattr(cls, '_djangoratings2'):
+            cls._djangoratings2 = []
+        cls._djangoratings2.append(self)
 
         setattr(cls, name, field)
 

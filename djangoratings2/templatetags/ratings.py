@@ -7,7 +7,7 @@ from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ObjectDoesNotExist
 
-from djangoratings.models import Vote
+from djangoratings2.models import Vote
 
 register = template.Library()
 
