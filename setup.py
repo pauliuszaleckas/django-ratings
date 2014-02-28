@@ -8,18 +8,18 @@ tests_require = [
 ]
 
 setup(
-    name='django-ratings',
-    version=".".join(map(str, __import__('djangoratings').__version__)),
-    author='David Cramer',
-    author_email='dcramer@gmail.com',
+    name='django-ratings2',
+    version=".".join(map(str, __import__('djangoratings2').__version__)),
+    author='Paulius Zaleckas',
+    author_email='paulius.zaleckas@gmail.com',
     description='Generic Ratings in Django',
-    url='http://github.com/dcramer/django-ratings',
+    url='http://github.com/pauliuszaleckas/django-ratings2',
     install_requires=[
         'django',
     ],
     tests_require=tests_require,
     extras_require={'test': tests_require},
-    test_suite='djangoratings.runtests.runtests',
+    test_suite='djangoratings2.runtests.runtests',
     packages=find_packages(),
     include_package_data=True,
     classifiers=[
