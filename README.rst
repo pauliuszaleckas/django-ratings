@@ -39,12 +39,6 @@ Alternatively you could do something like::
 	class MyModel(models.Model):
 	    rating = AnonymousRatingField(range=10)
 
-If you'd like to use the built-in weighting methods, to make it appear more difficult for an object
-to obtain a higher rating, you can use the ``weight`` kwarg::
-
-	class MyModel(models.Model):
-	    rating = RatingField(range=10, weight=10)
-
 ``RatingField`` allows the following options:
 
 * ``range = 2`` - The range in which values are accepted. For example, a range of 2, says there are 2 possible vote scores.
@@ -79,7 +73,7 @@ How you can order by top-rated using an algorithm (example from Nibbits.com sour
 
 	# In this example, ``rating`` is the attribute name for your ``RatingField``
 	qs = qs.extra(select={
-	    'rating': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (MyModel.rating.range, MyModel.rating.weight)
+	    'rating': '((100/%s*rating_score/rating_votes)+100)/2' % MyModel.rating.range
 	})
 	qs = qs.order_by('-rating')
 
@@ -95,10 +89,6 @@ Get recent ratings for your instance::
 Get the percent of voters approval::
 
 	myinstance.rating.get_percent()
-
-Get that same percentage, but excluding your ``weight``::
-
-	myinstance.rating.get_real_percent()
 
 ===============================
 Generic Views: Processing Votes

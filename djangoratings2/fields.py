@@ -54,18 +54,10 @@ class RatingManager(object):
     def get_percent(self):
         """get_percent()
         
-        Returns the weighted percentage of the score from min-max values"""
+        Returns the percentage of the score from min-max values"""
         if not (self.votes and self.score):
             return 0
         return 100 * (self.get_rating() / self.field.range)
-    
-    def get_real_percent(self):
-        """get_real_percent()
-        
-        Returns the unmodified percentage of the score based on a 0-point scale."""
-        if not (self.votes and self.score):
-            return 0
-        return 100 * (self.get_real_rating() / self.field.range)
     
     def get_ratings(self):
         """get_ratings()
@@ -76,10 +68,10 @@ class RatingManager(object):
     def get_rating(self):
         """get_rating()
         
-        Returns the weighted average rating."""
+        Returns the average rating."""
         if not (self.votes and self.score):
             return 0
-        return float(self.score)/(self.votes+self.field.weight)
+        return float(self.score)/self.votes
     
     def get_opinion_percent(self):
         """get_opinion_percent()
@@ -87,14 +79,6 @@ class RatingManager(object):
         Returns a neutral-based percentage."""
         return (self.get_percent()+100)/2
 
-    def get_real_rating(self):
-        """get_rating()
-        
-        Returns the unmodified average rating."""
-        if not (self.votes and self.score):
-            return 0
-        return float(self.score)/self.votes
-    
     def get_rating_for_user(self, user, ip_address=None, cookies={}):
         """get_rating_for_user(user, ip_address=None, cookie=None)
         
@@ -337,7 +321,6 @@ class RatingField(IntegerField):
         if 'choices' in kwargs:
             raise TypeError("%s invalid attribute 'choices'" % (self.__class__.__name__,))
         self.can_change_vote = kwargs.pop('can_change_vote', False)
-        self.weight = kwargs.pop('weight', 0)
         self.range = kwargs.pop('range', 2)
         self.allow_anonymous = kwargs.pop('allow_anonymous', False)
         self.use_cookies = kwargs.pop('use_cookies', False)
@@ -376,7 +359,6 @@ class RatingField(IntegerField):
 
     def get_db_prep_lookup(self, lookup_type, value, connection=None, prepared=False):
         # TODO: hack in support for __score and __votes
-        # TODO: order_by on this field should use the weighted algorithm
         raise NotImplementedError(self.get_db_prep_lookup)
         # if lookup_type in ('score', 'votes'):
         #     lookup_type = 
