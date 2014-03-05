@@ -55,8 +55,8 @@ class RatingManager(object):
         """get_percent()
         
         Returns the percentage of the score from min-max values"""
-        if not (self.votes and self.score):
-            return 0
+        if not self.votes:
+            return None
         return 100 * (self.get_rating() / self.field.range)
     
     def get_ratings(self):
@@ -69,14 +69,16 @@ class RatingManager(object):
         """get_rating()
         
         Returns the average rating."""
-        if not (self.votes and self.score):
-            return 0
+        if not self.votes:
+            return None
         return float(self.score)/self.votes
     
     def get_opinion_percent(self):
         """get_opinion_percent()
         
         Returns a neutral-based percentage."""
+        if not self.votes:
+            return None
         return (self.get_percent()+100)/2
 
     def get_rating_for_user(self, user, ip_address=None, cookies={}):
