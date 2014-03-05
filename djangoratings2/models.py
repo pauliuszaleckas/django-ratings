@@ -27,8 +27,8 @@ class Vote(models.Model):
     user            = models.ForeignKey(User, blank=True, null=True, related_name="votes")
     ip_address      = models.IPAddressField()
     cookie          = models.CharField(max_length=32, blank=True, null=True)
-    date_added      = models.DateTimeField(default=now, editable=False)
-    date_changed    = models.DateTimeField(default=now, editable=False)
+    date_added      = models.DateTimeField(auto_now_add=True)
+    date_changed    = models.DateTimeField(auto_now=True)
 
     objects         = VoteManager()
 
@@ -39,10 +39,6 @@ class Vote(models.Model):
 
     def __unicode__(self):
         return u"%s voted %s on %s" % (self.user_display, self.score, self.content_object)
-
-    def save(self, *args, **kwargs):
-        self.date_changed = now()
-        super(Vote, self).save(*args, **kwargs)
 
     def user_display(self):
         if self.user:
