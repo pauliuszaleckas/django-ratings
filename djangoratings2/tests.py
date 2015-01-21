@@ -10,13 +10,8 @@ from models import Vote, SimilarUser, IgnoredObject
 from fields import AnonymousRatingField, RatingField
 
 # support for custom User models in Django 1.5+
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:  # django < 1.5
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
-
+from djangoratings.compat import user_model_label
+User = user_model_label
 
 settings.RATINGS_VOTES_PER_IP = 1
 
