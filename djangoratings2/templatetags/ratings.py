@@ -14,7 +14,7 @@ register = template.Library()
 class RatingByRequestNode(template.Node):
     def __init__(self, request, obj, context_var):
         self.request = request
-        self.obj, self.field_name = obj.split('.')
+        self.obj, self.field_name = obj.rsplit('.', 1)
         self.context_var = context_var
     
     def render(self, context):
