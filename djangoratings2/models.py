@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 # support for custom User models in Django 1.5+
-from djangoratings.compat import user_model_label
+from djangoratings2.compat import user_model_label
 User = user_model_label
 
 try:
